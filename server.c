@@ -6,11 +6,13 @@
 /*   By: aarribas <aarribas@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 16:11:53 by aarribas          #+#    #+#             */
-/*   Updated: 2022/05/25 18:59:01 by aarribas         ###   ########.fr       */
+/*   Updated: 2022/05/26 11:43:20 by aarribas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+
+int			status;
 
 static void	ft_client_information(int sig)
 {
@@ -38,6 +40,13 @@ static void	ft_client_information(int sig)
 	}
 }
 
+static void	ft_close_server(int sig)
+{
+	ft_putstr_fd("Servidor down\n", 1);
+	sig = 2;
+	status = 0;
+}
+
 static void	ft_print_pid(void)
 {
 	int	nb_pid;
@@ -56,5 +65,10 @@ int	main(int ac, char **av)
 		ft_putchar_fd('\n', 1);
 		signal(SIGUSR1, ft_client_information);
 		signal(SIGUSR2, ft_client_information);
+		signal(SIGINT, ft_close_server);
+		while (status)
+		{
+		}
 	}
+	return (0);
 }
