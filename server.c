@@ -6,13 +6,14 @@
 /*   By: aarribas <aarribas@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 16:11:53 by aarribas          #+#    #+#             */
-/*   Updated: 2022/05/26 11:43:20 by aarribas         ###   ########.fr       */
+/*   Updated: 2022/05/27 08:33:57 by aarribas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include "../libft/libft.h"
+#include <signal.h>
 
-int			status;
+int			status = 1;
 
 static void	ft_client_information(int sig)
 {
@@ -59,9 +60,10 @@ static void	ft_print_pid(void)
 
 int	main(int ac, char **av)
 {
+	av = NULL;
 	if (ac != 1)
 	{
-		ft_print_bid();
+		ft_print_pid();
 		ft_putchar_fd('\n', 1);
 		signal(SIGUSR1, ft_client_information);
 		signal(SIGUSR2, ft_client_information);

@@ -6,12 +6,11 @@
 /*   By: aarribas <aarribas@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 16:11:49 by aarribas          #+#    #+#             */
-/*   Updated: 2022/05/26 18:58:03 by aarribas         ###   ########.fr       */
+/*   Updated: 2022/05/27 08:28:07 by aarribas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "minitalk.h"
+#include "../libft/libft.h"
 #include <signal.h>
 #include <zconf.h>
 
@@ -38,8 +37,17 @@ static int	ft_process_client(int pid_id, char *str)
 	i = 0;
 	while (str[i] >= ' ' && str[i] <= '~')
 	{
-		if (send_bin)
+		if (send_bin(pid_id, SIGUSR1))
+			return (1);
+		i++;
 	}
+	i = 0;
+	while (i < 7)
+	{
+		kill(pid_id, SIGUSR1);
+		i++;
+	}
+	return (0);
 }
 
 int	main(int ac, char **av)
