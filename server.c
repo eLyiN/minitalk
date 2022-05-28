@@ -6,16 +6,18 @@
 /*   By: aarribas <aarribas@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 16:11:53 by aarribas          #+#    #+#             */
-/*   Updated: 2022/05/27 08:33:57 by aarribas         ###   ########.fr       */
+/*   Updated: 2022/05/28 13:25:37 by aarribas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft/libft.h"
+#include "./libft/libft.h"
 #include <signal.h>
+#include <stdio.h>
+#include <unistd.h>
 
 int			status = 1;
 
-static void	ft_client_information(int sig)
+static void	ft_client_information(int signal)
 {
 	static size_t	i;
 	static int		bit;
@@ -27,9 +29,9 @@ static void	ft_client_information(int sig)
 		i++;     // i = 1;
 	}
 	buf[i] &= ~(1 << 7); // 0000 0001
-	if (sig == SIGUSR1)
+	if (signal == SIGUSR1)
 		buf[i] |= (1 << bit); //0000 1101
-	else if (sig == SIGUSR2)
+	else if (signal == SIGUSR2)
 		buf[i] &= ~(1 << bit);
 	if (i == 1001 || buf[i] == 127) // CHAR 127 = DEL
 	{
@@ -41,16 +43,16 @@ static void	ft_client_information(int sig)
 	}
 }
 
-static void	ft_close_server(int sig)
+static void	ft_close_server(int signal)
 {
+	signal = 2;
 	ft_putstr_fd("Servidor down\n", 1);
-	sig = 2;
 	status = 0;
 }
 
 static void	ft_print_pid(void)
 {
-	int	nb_pid;
+	__pid_t	nb_pid;
 
 	nb_pid = getpid();
 	if (nb_pid == 0)
@@ -60,8 +62,13 @@ static void	ft_print_pid(void)
 
 int	main(int ac, char **av)
 {
-	av = NULL;
+	*av = NULL;
 	if (ac != 1)
+	{
+		ft_putstr_fd("Server sin parametros.", 1);
+		return (1);
+	}
+	else
 	{
 		ft_print_pid();
 		ft_putchar_fd('\n', 1);

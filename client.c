@@ -6,11 +6,11 @@
 /*   By: aarribas <aarribas@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 16:11:49 by aarribas          #+#    #+#             */
-/*   Updated: 2022/05/27 08:28:07 by aarribas         ###   ########.fr       */
+/*   Updated: 2022/05/28 13:11:52 by aarribas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft/libft.h"
+#include "./libft/libft.h"
 #include <signal.h>
 #include <zconf.h>
 
@@ -37,7 +37,7 @@ static int	ft_process_client(int pid_id, char *str)
 	i = 0;
 	while (str[i] >= ' ' && str[i] <= '~')
 	{
-		if (send_bin(pid_id, SIGUSR1))
+		if (send_bin(pid_id, str[i]))
 			return (1);
 		i++;
 	}
@@ -46,6 +46,7 @@ static int	ft_process_client(int pid_id, char *str)
 	{
 		kill(pid_id, SIGUSR1);
 		i++;
+		usleep(1000);
 	}
 	return (0);
 }
@@ -54,7 +55,7 @@ int	main(int ac, char **av)
 {
 	int	pid_id;
 
-	if (ac < 3)
+	if (ac != 3)
 	{
 		ft_putstr_fd("Necesitas insertar PID y string\n", 1);
 		return (1);
